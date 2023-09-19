@@ -3,12 +3,20 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 
 
-export default function Aipath({ navigation }) {
+export default function Aipath({ route, navigation }) { // 컴포넌트가 받아오는 props (정보, 다음화면)
 
-    const [selectedPreference, setSelectedPreference] = useState('');
+    // 이전 화면에서 전달된 선호 시간 (낮/밤), 목적 (운동/나들이), 동행자 정보 및 라이딩 등급
+    const { timePreference, purpose, companion, level } = route.params; 
+    const [selectedRoadType, setSelectedRoadType] = useState('');
 
-    const handlePress = () => {
-        navigation.navigate('       '); // 버튼눌렀을때 이동
+    const handleBikeRoadPress = () => {
+        setSelectedRoadType('자전거 도로');
+        navigation.navigate('       ', { timePreference: timePreference , purpose: purpose , companion: companion , level: level , roadType: '자전거 도로로 주행하고 싶은데 한강 자전거 경로를 추천해줘' });
+    };
+
+    const handleWalkRoadPress = () => {
+        setSelectedRoadType('산책로');
+        navigation.navigate('       ', { timePreference: timePreference , purpose: purpose , companion: companion , level: level , roadType: '산책로로 주행하고 싶은데 한강 자전거 경로를 추천해줘' });
     };
 
   return (
@@ -19,13 +27,13 @@ export default function Aipath({ navigation }) {
             <Text style={styles.fftext}></Text>
         </View>
         <View style={styles.buttonView}>
-            <TouchableOpacity style={styles.buttonText} onPress={handlePress}>
+            <TouchableOpacity style={styles.buttonText} onPress={handleBikeRoadPress}>
                 <Text style={styles.secondtext}>자전거 도로</Text>
             </TouchableOpacity>
         </View>
 
         <View style={styles.buttonView2}>
-            <TouchableOpacity style={styles.buttonText} onPress={handlePress}>
+            <TouchableOpacity style={styles.buttonText} onPress={handleWalkRoadPress}>
                 <Text style={styles.secondtext}>산책로</Text>
             </TouchableOpacity>
         </View>

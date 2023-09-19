@@ -3,12 +3,21 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 
 
-export default function Aipath({ navigation }) {
+export default function Aipath({ route, navigation }) { // 컴포넌트가 받아오는 props (정보, 다음화면)
 
-    const [selectedPreference, setSelectedPreference] = useState('');
+    const { preference: timePreference } = route.params; // 이전 화면에서 전달된 선호 시간(낮/밤)
+    const [selectedPurpose, setSelectedPurpose] = useState('');
 
-    const handlePress = () => {
-        navigation.navigate('    '); // 버튼눌렀을때 이동
+    // 운동 눌렀을때
+    const handleExercisePress = () => {
+        setSelectedPurpose('운동');
+        navigation.navigate('    ', { timePreference: timePreference, purpose: '운동 목적으로' });
+    };
+
+    // 나들이 눌렀을때
+    const handleOutingPress  = () => {
+        setSelectedPurpose('나들이');
+        navigation.navigate('    ', { timePreference: timePreference, purpose: '나들이 목적으로' });
     };
 
   return (
@@ -19,13 +28,13 @@ export default function Aipath({ navigation }) {
             <Text style={styles.fftext}></Text>
         </View>
         <View style={styles.buttonView}>
-            <TouchableOpacity style={styles.buttonText} onPress={handlePress}>
+            <TouchableOpacity style={styles.buttonText} onPress={handleExercisePress}>
                 <Text style={styles.secondtext}>운동</Text>
             </TouchableOpacity>
         </View>
 
         <View style={styles.buttonView2}>
-            <TouchableOpacity style={styles.buttonText} onPress={handlePress}>
+            <TouchableOpacity style={styles.buttonText} onPress={handleOutingPress}>
                 <Text style={styles.secondtext}>나들이</Text>
             </TouchableOpacity>
         </View>

@@ -3,12 +3,25 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 
 
-export default function Aipath({ navigation }) {
+export default function Aipath({ route, navigation }) { // 컴포넌트가 받아오는 props (정보, 다음화면)
+    
+    // 이전 화면에서 전달된 선호 시간 (낮/밤), 목적 (운동/나들이), 동행자 정보
+    const { timePreference, purpose, companion } = route.params; 
+    const [selectedLevel, setSelectedLevel] = useState('');
 
-    const [selectedPreference, setSelectedPreference] = useState('');
+    const handleBeginnerPress = () => {
+        setSelectedLevel('초보자');
+        navigation.navigate('      ', { timePreference: timePreference , purpose: purpose , companion: companion , level: '난이도는 초보자이고' });
+    };
 
-    const handlePress = () => {
-        navigation.navigate('      '); // 버튼눌렀을때 이동
+    const handleintermediatePress = () => {
+        setSelectedLevel('중급자');
+        navigation.navigate('      ', { timePreference: timePreference , purpose: purpose , companion: companion , level: '난이도는 중급자이고' });
+    };
+
+    const handlehighPress = () => {
+        setSelectedLevel('고급자');
+        navigation.navigate('      ', { timePreference: timePreference , purpose: purpose , companion: companion , level: '난이도는 고급자이고' });
     };
 
   return (
@@ -19,19 +32,19 @@ export default function Aipath({ navigation }) {
             <Text style={styles.fftext}></Text>
         </View>
         <View style={styles.buttonView}>
-            <TouchableOpacity style={styles.buttonText} onPress={handlePress}>
+            <TouchableOpacity style={styles.buttonText} onPress={handleBeginnerPress}>
                 <Text style={styles.secondtext}>초보자</Text>
             </TouchableOpacity>
         </View>
 
         <View style={styles.buttonView2}>
-            <TouchableOpacity style={styles.buttonText} onPress={handlePress}>
+            <TouchableOpacity style={styles.buttonText} onPress={handleintermediatePress}>
                 <Text style={styles.secondtext}>중급자</Text>
             </TouchableOpacity>
         </View>
 
         <View style={styles.buttonView2}>
-            <TouchableOpacity style={styles.buttonText} onPress={handlePress}>
+            <TouchableOpacity style={styles.buttonText} onPress={handlehighPress}>
                 <Text style={styles.secondtext}>전문가</Text>
             </TouchableOpacity>
         </View>
