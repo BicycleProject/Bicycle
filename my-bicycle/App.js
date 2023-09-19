@@ -2,6 +2,12 @@ import React from 'react';
 import WebViewComponent from './KakaoComponent'; // kakao map 연동
 import Aipath from './Aipath'; // Aipath 컴포넌트 이동
 import Aipath2 from './Aipath2'; // Aipath2 컴포넌트 이동
+import Aipath3 from './Aipath3'; // Aipath3 컴포넌트 이동
+import Aipath4 from './Aipath4'; // Aipath4 컴포넌트 이동
+import Aipath5 from './Aipath5'; // Aipath5 컴포넌트 이동
+import Aipath6 from './Aipath6'; // Aipath6 컴포넌트 이동
+import Aipath7 from './Aipath7'; // Aipath7 컴포넌트 이동
+
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 // 네비게이터로 버튼 이동 구현
 // 설치방법 npm install @react-navigation/native @react-navigation/stack
@@ -57,6 +63,11 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name=" " component={Aipath} />
         <Stack.Screen name="  " component={Aipath2} />
+        <Stack.Screen name="   " component={Aipath3} />
+        <Stack.Screen name="    " component={Aipath4} />
+        <Stack.Screen name="     " component={Aipath5} />
+        <Stack.Screen name="      " component={Aipath6} />
+        <Stack.Screen name="       " component={Aipath7} />
         <Stack.Screen name="kakao" component={WebViewComponent} />
       </Stack.Navigator>
     </NavigationContainer>

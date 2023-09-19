@@ -3,33 +3,34 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 
 
-export default function Aipath({ route, navigation }) {
-
+export default function Aipath({ navigation }) {
 
     const [selectedPreference, setSelectedPreference] = useState('');
 
     const handlePress = () => {
-        navigation.navigate('   '); // 다음창으로 넘어감
+        navigation.navigate('       '); // 버튼눌렀을때 이동
     };
-    
+
   return (
     <View>
         <View style={styles.container}>
-            <Text style={styles.firsttext}>주로 라이딩하는 시간</Text>
-            <Text style={styles.fftext}>낮과 밤 둘중에 주로</Text>
-            <Text style={styles.fftext}>라이딩하는 시간을 알려주세요 🚲</Text>
+            <Text style={styles.firsttext}>어떤 도로 위주로 탐색해 드릴까요?</Text>
+            <Text style={styles.fftext}>원하시는 도로로 추천해 드려요 :D</Text>
+            <Text style={styles.fftext}></Text>
         </View>
         <View style={styles.buttonView}>
             <TouchableOpacity style={styles.buttonText} onPress={handlePress}>
-                <Text style={styles.secondtext}>낮</Text>
+                <Text style={styles.secondtext}>자전거 도로</Text>
             </TouchableOpacity>
         </View>
 
         <View style={styles.buttonView2}>
             <TouchableOpacity style={styles.buttonText} onPress={handlePress}>
-                <Text style={styles.secondtext}>밤</Text>
+                <Text style={styles.secondtext}>산책로</Text>
             </TouchableOpacity>
         </View>
+
+
     </View>
   );
 }
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     },
 
     buttonView: {
-        marginTop: 90,
+        marginTop: 60,
         marginLeft: 26,
     },
 

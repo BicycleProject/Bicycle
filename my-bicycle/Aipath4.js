@@ -3,31 +3,48 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 
 
-export default function Aipath({ route, navigation }) {
-
+export default function Aipath({ navigation }) {
 
     const [selectedPreference, setSelectedPreference] = useState('');
 
     const handlePress = () => {
-        navigation.navigate('   '); // 다음창으로 넘어감
+        navigation.navigate('     '); // 버튼눌렀을때 이동
     };
-    
+
   return (
     <View>
         <View style={styles.container}>
-            <Text style={styles.firsttext}>주로 라이딩하는 시간</Text>
-            <Text style={styles.fftext}>낮과 밤 둘중에 주로</Text>
-            <Text style={styles.fftext}>라이딩하는 시간을 알려주세요 🚲</Text>
+            <Text style={styles.firsttext}>누구와 함께하고 싶나요?</Text>
+            <Text style={styles.fftext}>혼자도 괜찮아요!</Text>
+            <Text style={styles.fftext}>같이 어플을 사용할 사람들을 눌러주세요!</Text>
         </View>
         <View style={styles.buttonView}>
             <TouchableOpacity style={styles.buttonText} onPress={handlePress}>
-                <Text style={styles.secondtext}>낮</Text>
+                <Text style={styles.secondtext}>솔로</Text>
             </TouchableOpacity>
         </View>
 
         <View style={styles.buttonView2}>
             <TouchableOpacity style={styles.buttonText} onPress={handlePress}>
-                <Text style={styles.secondtext}>밤</Text>
+                <Text style={styles.secondtext}>가족</Text>
+            </TouchableOpacity>
+        </View>
+
+        <View style={styles.buttonView2}>
+            <TouchableOpacity style={styles.buttonText} onPress={handlePress}>
+                <Text style={styles.secondtext}>커플</Text>
+            </TouchableOpacity>
+        </View>
+
+        <View style={styles.buttonView2}>
+            <TouchableOpacity style={styles.buttonText} onPress={handlePress}>
+                <Text style={styles.secondtext}>친구</Text>
+            </TouchableOpacity>
+        </View>
+
+        <View style={styles.buttonView2}>
+            <TouchableOpacity style={styles.buttonText} onPress={handlePress}>
+                <Text style={styles.secondtext}>동호회</Text>
             </TouchableOpacity>
         </View>
     </View>
@@ -36,7 +53,7 @@ export default function Aipath({ route, navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 150,
+        marginTop: 100,
         marginLeft: 30,
     },
 
@@ -62,7 +79,7 @@ const styles = StyleSheet.create({
     },
 
     buttonView: {
-        marginTop: 90,
+        marginTop: 60,
         marginLeft: 26,
     },
 
