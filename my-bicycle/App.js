@@ -7,6 +7,7 @@ import Aipath4 from './Aipath4'; // Aipath4 컴포넌트 이동
 import Aipath5 from './Aipath5'; // Aipath5 컴포넌트 이동
 import Aipath6 from './Aipath6'; // Aipath6 컴포넌트 이동
 import Aipath7 from './Aipath7'; // Aipath7 컴포넌트 이동
+import Community from './Community'; // 커뮤니티 컴포넌트 이동
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 // 네비게이터로 버튼 이동 구현
@@ -45,7 +46,7 @@ function HomeScreen({ navigation }) {
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.thirdbutton} onPress={() => navigation.navigate('other')}>
+        <TouchableOpacity style={styles.thirdbutton} onPress={() => navigation.navigate('커뮤니티')}>
           <Text>커뮤니티</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.thirdbutton} onPress={() => navigation.navigate('other')}>
@@ -69,6 +70,7 @@ export default function App() {
         <Stack.Screen name="      " component={Aipath6} />
         <Stack.Screen name="       " component={Aipath7} />
         <Stack.Screen name="kakao" component={WebViewComponent} />
+        <Stack.Screen name="커뮤니티" component={Community} />
       </Stack.Navigator>
     </NavigationContainer>
   );
