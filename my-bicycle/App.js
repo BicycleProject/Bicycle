@@ -8,6 +8,8 @@ import Aipath5 from './Aipath5'; // Aipath5 컴포넌트 이동
 import Aipath6 from './Aipath6'; // Aipath6 컴포넌트 이동
 import Aipath7 from './Aipath7'; // Aipath7 컴포넌트 이동
 import Community from './Community'; // 커뮤니티 컴포넌트 이동
+import DraggableBottomSheet from './src/animations/DraggableBottomSheet/DraggableBottomSheet';
+import Repairshop from './repairshop';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 // 네비게이터로 버튼 이동 구현
@@ -22,7 +24,7 @@ function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.firstbutton} onPress={() => navigation.navigate('other')}>
+        <TouchableOpacity style={styles.firstbutton} onPress={() => navigation.navigate('DraggableBottomSheet')}>
           <Text>My</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.firstbutton} onPress={() => navigation.navigate('other')}>
@@ -49,7 +51,7 @@ function HomeScreen({ navigation }) {
         <TouchableOpacity style={styles.thirdbutton} onPress={() => navigation.navigate('커뮤니티')}>
           <Text>커뮤니티</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.thirdbutton} onPress={() => navigation.navigate('other')}>
+        <TouchableOpacity style={styles.thirdbutton} onPress={() => navigation.navigate('repairshop')}>
           <Text>내 근처 수리점</Text>
         </TouchableOpacity>
       </View>
@@ -71,6 +73,11 @@ export default function App() {
         <Stack.Screen name="       " component={Aipath7} />
         <Stack.Screen name="kakao" component={WebViewComponent} />
         <Stack.Screen name="커뮤니티" component={Community} />
+        <Stack.Screen
+        name="DraggableBottomSheet"
+        component={DraggableBottomSheet}
+        options={{title: 'Draggable Bottom Sheet'}} />
+        <Stack.Screen name="repairshop" component={Repairshop} />
       </Stack.Navigator>
     </NavigationContainer>
   );
