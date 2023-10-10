@@ -1,20 +1,46 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const Signup = () => {
-    
+
     const navigation = useNavigation();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handlenextPress = () => {
-         navigation.navigate('Main');
-    };
+    const handleSubmit = async () => {
+        try {
+            // 서버로 회원가입 요청을 보냅니다.
+            const response = await axios.post('http://10.20.100.157:8082/register', { 
+                name: name,
+                email: email,
+                password: password,
+            });
+
+            if (response.status >= 200 && response.status < 300) {
+                alert('회원가입 성공!');
+                
+                navigation.navigate('Main');
+            } else {
+                throw new Error(); 
+            }
+            
+        } catch (error) {
+            console.log(error);
+            
+            if (error.response) {
+                alert(JSON.stringify(error.response.data));
+                
+                return;
+            }
+        }
+    }
+
     const handlebackPress = () => {
-        navigation.navigate('Main');
-   };
+            navigation.navigate('Main');
+    };
     const handleNameClick = () => {
         if (!name) {
             setName('');
@@ -30,6 +56,7 @@ const Signup = () => {
             setPassword('');
         }
     };
+    
     return (
         <View style={styles.mainContainer}>
             <View style={styles.group1}>
@@ -79,7 +106,7 @@ const Signup = () => {
                     </View>
                 </TouchableWithoutFeedback>
                 <View style={styles.group2}>
-                    <TouchableOpacity onPress={handlenextPress}>
+                    <TouchableOpacity onPress={handleSubmit}>
                         <View style={styles.button}>
                             <Text style={styles.SignupbuttonText}>회원가입</Text>
                         </View>
@@ -87,10 +114,10 @@ const Signup = () => {
                 </View>
             </View>
             <View style={styles.maskGroup}>
-      <TouchableOpacity onPress={handlebackPress}>
-        <Image source={require('./src/뒤로가기.png')} style={styles.arrow} />
-        </TouchableOpacity>
-      </View>
+            <TouchableOpacity onPress={handlebackPress}>
+                <Image source={require('./src/뒤로가기.png')} style={styles.arrow} />
+                </TouchableOpacity>
+            </View>
         </View>
     );
 };
@@ -276,15 +303,15 @@ const styles = StyleSheet.create({
         height: 27,
         left: 39,
         top: 64,
-      },
-      arrow: {
+    },
+    arrow: {
         position: 'absolute',
         width: 27,
         height: 27,
         left:0,
         top: 0,
         transform: [{ scaleY: -1 }],
-      },
+    },
 });
 
 export default Signup;

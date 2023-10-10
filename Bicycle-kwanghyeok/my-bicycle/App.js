@@ -22,7 +22,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="MainScreen" screenOptions={{ headerShown: false ,cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,}}>
+      <Stack.Navigator initialRouteName="Main_1" screenOptions={{ headerShown: false ,cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,}}>
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
         <Stack.Screen name="Main_1" component={Main_1} options={{ headerShown: false }}/>
         <Stack.Screen name="Main_2" component={Main_2} options={{ headerShown: false }}/>
