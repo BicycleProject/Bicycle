@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity,ScrollView, TextInput, Button, StyleSheet, Dimensions, Image, FlatList,KeyboardAvoidingView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, TextInput, Button, StyleSheet, Dimensions, Image, FlatList, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 const screenWidth = Dimensions.get('window').width; // 화면 가로 크기를 가져옴
 const screenHeight = Dimensions.get('window').height; // 화면 세로 크기를 가져옴
@@ -24,7 +24,7 @@ function PostDetail({ route }) {
     };
 
     return (
-        <KeyboardAvoidingView 
+        <KeyboardAvoidingView
             style={styles.container}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
@@ -51,9 +51,9 @@ function PostDetail({ route }) {
                     />
                 </TouchableOpacity>
             </View>
-            
+
             <ScrollView style={styles.body}>
-                
+
                 <Text style={[{ color: '#ffffff', fontSize: 20 }]}>{post.author}</Text>
                 <Text style={[{ color: '#ffffff' }]}>{post.time}</Text>
 
@@ -62,10 +62,10 @@ function PostDetail({ route }) {
                     resizeMode="contain"
                     style={{ width: screenWidth, height: screenHeight * 0.3, right: 20 }} />
                 <Text style={[styles.content, { color: '#ffffff', fontSize: 18 }]}>{post.content}</Text>
-                
+
             </ScrollView>
             <View style={styles.commentsContainer}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <TouchableOpacity onPress={() => handleLike(post.id)}>
                         <Image source={require('./src/img_before_like.png')} resizeMode="contain"
                             style={{ width: 24, height: 24 }} />
@@ -115,7 +115,7 @@ function PostDetail({ route }) {
                     }}
                 />
             </View>
-            </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
     );
 }
 
