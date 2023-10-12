@@ -14,6 +14,10 @@ import MainScreen from './MainScreen';
 import Signup from './Signup';
 import Main from './Main';
 import Riding from './Riding';
+import Myinfo from './Myinfo';
+import PostDetail from './PostDetail';
+import Posting from './Posting';
+import Aipath from './Aipath';
 
 
 const Stack = createStackNavigator();
@@ -36,6 +40,14 @@ export default function App() {
         <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }}/>
         <Stack.Screen name="Main" component={Main} options={{ headerShown: false }}/>
         <Stack.Screen name="Riding" component={Riding} options={{ headerShown: false }}/>
+        <Stack.Screen name="Myinfo" component={Myinfo} options={{ headerShown: false }}/>
+        <Stack.Screen name="PostDetail" component={PostDetail} options={{ headerShown: false }}/>
+        <Stack.Screen name="Posting" component={Posting} options={{ headerShown: false }}/>
+        <Stack.Screen name="Aipath" component={Aipath} options={{ headerShown: false }}/>
+
+
+
+
 
       </Stack.Navigator>
     </NavigationContainer>

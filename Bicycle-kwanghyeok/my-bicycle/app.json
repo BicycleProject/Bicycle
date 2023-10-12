@@ -22,7 +22,9 @@
         "NSPhotoLibraryUsageDescription": "The app accesses the photo library to upload your profile when you are signing up or updating profile image."
       },
       "permissions": [
-        "LOCATION"
+        "LOCATION",
+        "CAMERA_ROLL",
+      "CAMERA"
       ]
     },
     "android": {
