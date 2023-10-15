@@ -1,0 +1,16 @@
+﻿.detail-bg {
+  background: white;
+  padding: 15px;
+  margin-top: 10px;
+}
+
+.list-box p {
+  font-size: 13px;
+  margin: 5px;
+  color: grey;
+}
+
+.list-box {
+  padding: 10px;
+  border-bottom: 1px solid#eee;
+}
