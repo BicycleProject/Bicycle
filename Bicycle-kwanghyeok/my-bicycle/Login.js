@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Login = () => {
     const navigation = useNavigation();
@@ -12,14 +14,16 @@ const Login = () => {
 
     const handleLoginPress = async () => {
         try {
-            const response = await axios.post('http://10.20.100.157:8082/login', { 
+            const response = await axios.post('http://10.20.100.29:8082/login', { 
                 email: email,
                 password: password,
             });
     
             if (response.status >= 200 && response.status < 300) {
-                alert('로그인 성공!');
-                
+                await AsyncStorage.setItem('userid', response.data.id);
+                await AsyncStorage.setItem('username', response.data.name);
+                            // 서버로부터 받은 메시지를 띄웁니다.
+                alert(response.data.message);
                 navigation.navigate('MainScreen');
             } else {
                 throw new Error(); 

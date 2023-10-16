@@ -1,85 +1,150 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 
+function Aipath3() {
+    const navigation = useNavigation();
 
-export default function Aipath({ route, navigation }) { // 컴포넌트가 받아오는 props (정보, 다음화면)
-
-    const { preference: timePreference } = route.params; // 이전 화면에서 전달된 선호 시간(낮/밤)
-    const [selectedPurpose, setSelectedPurpose] = useState('');
-
-    // 운동 눌렀을때
-    const handleExercisePress = () => {
-        setSelectedPurpose('운동');
-        navigation.navigate('    ', { timePreference: timePreference, purpose: '운동 목적으로' });
+    const handleBackPress = () => {
+        navigation.navigate('Aipath2');
     };
 
-    // 나들이 눌렀을때
-    const handleOutingPress  = () => {
-        setSelectedPurpose('나들이');
-        navigation.navigate('    ', { timePreference: timePreference, purpose: '나들이 목적으로' });
+    const handleNextPress = () => {
+        navigation.navigate('Aipath4');
+
     };
 
-  return (
-    <View>
+    return (
+
         <View style={styles.container}>
-            <Text style={styles.firsttext}>라이딩 목적</Text>
-            <Text style={styles.fftext}>주로 라이딩을 할때 무슨 목적으로 타시고 계신가요?</Text>
-            <Text style={styles.fftext}></Text>
-        </View>
-        <View style={styles.buttonView}>
-            <TouchableOpacity style={styles.buttonText} onPress={handleExercisePress}>
-                <Text style={styles.secondtext}>운동</Text>
-            </TouchableOpacity>
-        </View>
 
-        <View style={styles.buttonView2}>
-            <TouchableOpacity style={styles.buttonText} onPress={handleOutingPress}>
-                <Text style={styles.secondtext}>나들이</Text>
-            </TouchableOpacity>
+            <View style={styles.header}>
+                <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
+                    <Image
+                        source={require('./src/뒤로가기.png')}
+                        style={styles.backButtonImage}
+                    />
+                </TouchableOpacity>
+            </View>
+
+            <View style={styles.textContainer}>
+                <View style={styles.textBackground}>
+                    <Text style={styles.Text1}> 당신의
+                        <Text style={styles.AIText}> 라이딩 등급 </Text>
+                        을 알려주세요!
+                    </Text>
+                </View>
+                <Text style={styles.text2}>
+                초보자, 중급자, 전문가도 즐길 수 있다!</Text>
+            </View>
+
+
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity onPress={handleNextPress}>
+                    <View style={styles.button}>
+                        <Text style={styles.ButtonText}>초보자</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleNextPress}>
+                    <View style={styles.button}>
+                        <Text style={styles.ButtonText}>중급자</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleNextPress}>
+                    <View style={styles.button}>
+                        <Text style={styles.ButtonText}>고급자</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
         </View>
-    </View>
-  );
+    );
 }
 
 const styles = StyleSheet.create({
+
     container: {
-        marginTop: 150,
-        marginLeft: 30,
-    },
-
-
-    firsttext: {
-        fontSize: 27,
-    },
-    
-    fftext: {
-        marginTop: 15,
-        fontSize: 15,
-    },
-
-    buttonText: {
-        width: 250,
-        height: 50,
-
-        // 버튼 스타일 지정
-        backgroundColor: '#E6F5FF',
+        flex: 1,
+        backgroundColor: '#0C1320',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 10,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        padding: 10,
+        top: '10%',
+
+    },
+    backButton: {
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        left: '0%',
+    },
+    backButtonImage: {
+        width: 30,
+        height: 30,
+        resizeMode: 'contain',
     },
 
-    buttonView: {
-        marginTop: 90,
-        marginLeft: 26,
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 0,
+        top: '-30%',
+        flexDirection: 'column',
+    },
+    button: {
+        margin: 10,
+        width: 326,
+        height: 60,
+        backgroundColor: '#313A4B',
+        borderRadius: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    ButtonText: {
+        fontFamily: 'System',
+        fontStyle: 'normal',
+        fontWeight: '700',
+        fontSize: 18,
+        lineHeight: 26,
+        textAlign: 'center',
+        letterSpacing: -0.025,
+        color: '#FFFFFF',
+    },
+    textContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: '-8%',
     },
 
-    secondtext: {
-        color: '#29B6F6'
+    Text1: {
+        color: '#FFFFFF',
+        fontSize: 23
     },
-
-    buttonView2: {
-        marginTop: 20,
-        marginLeft: 26,
-    }
+    text2: {
+        color: '#FFFFFF',
+        fontSize: 18,
+        marginTop: 10,
+        textAlign: 'center',
+        lineHeight: 40, //텍스트 줄 간격
+    },
+    AIText: {
+        color: '#007FFF',  // 파랑색 RGB 코드
+        fontSize: 25,
+    },
+    textBackground: {
+        backgroundColor: '#313A4B',  // 배경색 설정
+        borderRadius: 10,  // 모서리 둥글게 (원하는 대로 조정)
+        padding: 10,  // 텍스트와 배경 사이의 간격 (원하는 대로 조정)
+        // 필요한 다른 스타일 요소들...
+      },
 });
+
+export default Aipath3;

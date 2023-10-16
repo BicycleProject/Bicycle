@@ -1,117 +1,160 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 
+function Aipath4() {
+    const navigation = useNavigation();
 
-export default function Aipath({ route, navigation }) { // 컴포넌트가 받아오는 props (정보, 다음화면)
-
-    const { timePreference, purpose } = route.params; // 이전 화면에서 전달된 선호 시간 (낮/밤)과 목적 (운동/나들이)
-    const [selectedCompanion, setSelectedCompanion] = useState('');
-
-    const handleSoloPress = () => {
-        setSelectedCompanion('솔로');
-        navigation.navigate('     ', { timePreference: timePreference , purpose: purpose , companion: '혼자 탈거야' }); 
+    const handleBackPress = () => {
+        navigation.navigate('Aipath3');
     };
 
-    const handleFamilyPress = () => {
-        setSelectedCompanion('가족');
-        navigation.navigate('     ', { timePreference: timePreference , purpose: purpose , companion: '가족과 탈거야' });
+    const handleNextPress = () => {
+        navigation.navigate('Aipath5');
+
     };
 
-    const handleCouplePress = () => {
-        setSelectedCompanion('커플');
-        navigation.navigate('     ', { timePreference: timePreference , purpose: purpose , companion: '남자/여자친구와 탈거야' });
-    };
+    return (
 
-    const handleFriendsPress = () => {
-        setSelectedCompanion('친구');
-        navigation.navigate('     ', { timePreference: timePreference , purpose: purpose , companion: '친구와 탈거야' });
-    };
-
-    const handleClubPress = () => {
-        setSelectedCompanion('동호회');
-        navigation.navigate('     ', { timePreference: timePreference , purpose: purpose , companion: '동호회가 탈만한' });
-    };
-
-
-  return (
-    <View>
         <View style={styles.container}>
-            <Text style={styles.firsttext}>누구와 함께하고 싶나요?</Text>
-            <Text style={styles.fftext}>혼자도 괜찮아요!</Text>
-            <Text style={styles.fftext}>같이 어플을 사용할 사람들을 눌러주세요!</Text>
-        </View>
-        <View style={styles.buttonView}>
-            <TouchableOpacity style={styles.buttonText} onPress={handleSoloPress}>
-                <Text style={styles.secondtext}>솔로</Text>
-            </TouchableOpacity>
-        </View>
 
-        <View style={styles.buttonView2}>
-            <TouchableOpacity style={styles.buttonText} onPress={handleFamilyPress}>
-                <Text style={styles.secondtext}>가족</Text>
-            </TouchableOpacity>
-        </View>
+            <View style={styles.header}>
+                <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
+                    <Image
+                        source={require('./src/뒤로가기.png')}
+                        style={styles.backButtonImage}
+                    />
+                </TouchableOpacity>
+            </View>
 
-        <View style={styles.buttonView2}>
-            <TouchableOpacity style={styles.buttonText} onPress={handleCouplePress}>
-                <Text style={styles.secondtext}>커플</Text>
-            </TouchableOpacity>
-        </View>
+            <View style={styles.textContainer}>
+                <View style={styles.textBackground}>
+                    <Text style={styles.Text1}> 누구와 함께하고 싶나요?
+  
+                    </Text>
+                </View>
+                <Text style={styles.AIText}> 혼자도 괜찮아요! </Text>
+                <Text style={styles.text2}> 같이 라이딩 할 사람들을 선택해주세요!</Text>
+            </View>
 
-        <View style={styles.buttonView2}>
-            <TouchableOpacity style={styles.buttonText} onPress={handleFriendsPress}>
-                <Text style={styles.secondtext}>친구</Text>
-            </TouchableOpacity>
-        </View>
 
-        <View style={styles.buttonView2}>
-            <TouchableOpacity style={styles.buttonText} onPress={handleClubPress}>
-                <Text style={styles.secondtext}>동호회</Text>
-            </TouchableOpacity>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity onPress={handleNextPress}>
+                    <View style={styles.button}>
+                        <Text style={styles.ButtonText}>솔로</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleNextPress}>
+                    <View style={styles.button}>
+                        <Text style={styles.ButtonText}>친구</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleNextPress}>
+                    <View style={styles.button}>
+                        <Text style={styles.ButtonText}>커플</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleNextPress}>
+                    <View style={styles.button}>
+                        <Text style={styles.ButtonText}>가족</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleNextPress}>
+                    <View style={styles.button}>
+                        <Text style={styles.ButtonText}>동호회</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
         </View>
-    </View>
-  );
+    );
 }
 
 const styles = StyleSheet.create({
+
     container: {
-        marginTop: 100,
-        marginLeft: 30,
-    },
-
-
-    firsttext: {
-        fontSize: 27,
-    },
-    
-    fftext: {
-        marginTop: 15,
-        fontSize: 15,
-    },
-
-    buttonText: {
-        width: 250,
-        height: 50,
-
-        // 버튼 스타일 지정
-        backgroundColor: '#E6F5FF',
+        flex: 1,
+        backgroundColor: '#0C1320',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 10,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        padding: 10,
+        top: '10%',
+
+    },
+    backButton: {
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        left: '0%',
+    },
+    backButtonImage: {
+        width: 30,
+        height: 30,
+        resizeMode: 'contain',
     },
 
-    buttonView: {
-        marginTop: 60,
-        marginLeft: 26,
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 0,
+        top: '-10%',
+        flexDirection: 'column',
+    },
+    button: {
+        margin: 10,
+        width: 326,
+        height: 60,
+        backgroundColor: '#313A4B',
+        borderRadius: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    ButtonText: {
+        fontFamily: 'System',
+        fontStyle: 'normal',
+        fontWeight: '700',
+        fontSize: 18,
+        lineHeight: 26,
+        textAlign: 'center',
+        letterSpacing: -0.025,
+        color: '#FFFFFF',
+    },
+    textContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: '3%',
     },
 
-    secondtext: {
-        color: '#29B6F6'
+    Text1: {
+        color: '#FFFFFF',
+        fontSize: 23
     },
-
-    buttonView2: {
-        marginTop: 20,
-        marginLeft: 26,
-    }
+    text2: {
+        color: '#FFFFFF',
+        fontSize: 18,
+        marginTop: 10,
+        textAlign: 'center',
+        lineHeight: 40, //텍스트 줄 간격
+    },
+    AIText: {
+        color: '#007FFF',  // 파랑색 RGB 코드
+        marginTop: 10,
+        fontSize: 20,
+    },
+    textBackground: {
+        backgroundColor: '#313A4B',  // 배경색 설정
+        borderRadius: 10,  // 모서리 둥글게 (원하는 대로 조정)
+        padding: 10,  // 텍스트와 배경 사이의 간격 (원하는 대로 조정)
+        // 필요한 다른 스타일 요소들...
+      },
 });
+
+export default Aipath4;

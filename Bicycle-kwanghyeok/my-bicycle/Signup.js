@@ -10,10 +10,26 @@ const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    async function checkEmail(email) {
+        try {
+            let response = await fetch(`http://10.20.100.29:8082/check-email?email=${encodeURIComponent(email)}`);
+            if (response.ok) {
+                let data = await response.json();
+                return data.exists;  // 서버가 { exists: true } 또는 { exists: false } 형태로 응답하도록 해야 합니다.
+            } else {
+                console.error(`Failed to check email: ${response.status} ${response.statusText}`);
+                return false;
+            }
+        } catch (error) {
+            console.error(`Failed to check email: ${error}`);
+            return false;
+        }
+    }
+
     const handleSubmit = async () => {
         try {
             // 서버로 회원가입 요청을 보냅니다.
-            const response = await axios.post('http://10.20.100.157:8082/register', { 
+            const response = await axios.post('http://10.20.100.29:8082/register', { 
                 name: name,
                 email: email,
                 password: password,

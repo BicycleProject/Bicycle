@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity,StyleSheet,} from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Aipath() {
     const navigation = useNavigation();
@@ -11,16 +12,17 @@ function Aipath() {
     };
 
     const handleStartPress = () => {
+        navigation.navigate('Aipath2');
+
     };
 
     const userName = "서수찬"
     return (
 
         <View style={styles.container}>
+
             <View style={styles.header}>
-                <TouchableOpacity
-                    style={styles.backButton}
-                    onPress={handleBackPress}>
+                <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
                     <Image
                         source={require('./src/뒤로가기.png')}
                         style={styles.backButtonImage}
@@ -39,6 +41,10 @@ function Aipath() {
                     </View>
                     <Text style={styles.profileText}> 님의 성향을 알아볼까요?</Text>
                 </View>
+                <Text style={styles.text2}>
+                    <Text style={styles.AIText}>AI </Text>
+                    는 간단한 성향 조사를 통해,{'\n'}
+                    자전거 성향에 맞는 올바른 경로를 추천합니다.</Text>
             </View>
 
 
@@ -54,11 +60,12 @@ function Aipath() {
 }
 
 const styles = StyleSheet.create({
+
     container: {
         flex: 1,
-        padding: 10,
-        left: '0%',
         backgroundColor: '#0C1320',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     header: {
         flexDirection: 'row',
@@ -66,9 +73,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         padding: 10,
-        top: '7%',
-        borderBottomWidth: 1,
-        borderBottomColor: '#ffffff',
+        top: '10%',
+
     },
     backButton: {
         width: 40,
@@ -88,7 +94,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         padding: 0,
         top: '-20%',
-        left: '3%',
     },
     button: {
         width: 326,
@@ -124,6 +129,17 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontSize: 23
     },
+    text2: {
+        color: '#FFFFFF',
+        fontSize: 18,
+        marginTop: 10,
+        textAlign: 'center',
+        lineHeight: 30, //텍스트 줄 간격
+    },
+    AIText: {
+        color: '#1E58BF',  // 파랑색 RGB 코드
+        fontSize: 25,
+      },
 
 });
 

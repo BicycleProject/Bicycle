@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
+import { useNavigation } from '@react-navigation/native';
 
 export default function NearbyRepairShopsScreen() {
+    const navigation = useNavigation();
 
     const [selectedShop, setSelectedShop] = useState(null);
     const [directions, setDirections] = useState(null);
     const apiKey = 'AIzaSyDvljOjmw4WGRKFE6nv8R4VBxiiVQsxHcw'; //Google Maps API 키
+
+    const backButtonImage = require('./src/뒤로가기검정.png');
 
     const [location, setLocation] = useState({
         latitude: 37.51037979,
@@ -141,6 +145,12 @@ export default function NearbyRepairShopsScreen() {
 
     return (
         <View style={styles.container}>
+            <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => navigation.goBack()}
+            >
+                <Image source={backButtonImage} style={styles.backButtonImage} />
+            </TouchableOpacity>
             <View style={styles.mapContainer}>
                 <MapView
                     style={styles.map}
@@ -220,11 +230,11 @@ const styles = {
     },
     shopListContainer: {
         flex: 1,
-        backgroundColor: 'white',
         paddingVertical: 16,
     },
     shopList: {
         padding: 16,
+
     },
     shopItem: {
         fontSize: 18,
@@ -234,4 +244,17 @@ const styles = {
         borderRadius: 10,
         paddingBottom: 8,
     },
+    backButton: {
+        position: 'absolute',  // 상위 컴포넌트 기준으로 위치 결정
+        top: 40,               // 상단에서 얼마나 떨어져 있는지 지정 (상태바 높이 고려)
+        left: 20,              // 왼쪽에서 얼마나 떨어져 있는지 지정
+        zIndex: 1000,          // 다른 요소 위에 나타나게 함 
+        padding: 10,
+    },
+    
+    backButtonImage: {
+        width: 25,
+        height: 25,
+       resizeMode:'contain'
+     },
 };

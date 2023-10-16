@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Button, StyleSheet, Dimensions, Image, FlatList } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import axios from 'axios';
 
 function Community() {
     const navigation = useNavigation();
-
+    const [selectedMenu, setSelectedMenu] = useState('인기');// 초기값 설정
     const handleBackPress = () => {
         navigation.navigate('MainScreen');
     };
 
     const handleButton1Press = () => {
-        // 첫 번째 버튼을 눌렀을 때 실행할 작업을 여기에 추가
+        navigation.navigate('Community');
     };
 
     const handleButton2Press = () => {
-        // 두 번째 버튼을 눌렀을 때 실행할 작업을 여기에 추가
+        navigation.navigate('ChattingList');
     };
 
     const handleButton3Press = () => {
@@ -26,62 +26,224 @@ function Community() {
         navigation.navigate('Posting');
     };
 
+    const menuItemStyles = (isSelected) => StyleSheet.create({
+        text: {
+            color: isSelected ? '#007FFF' : '#ffffff',
+            fontSize: 16,
+        },
+        underline: {
+            height: 2,
+            backgroundColor: isSelected ? '#007FFF' : 'transparent',
+            marginTop: 5,
+        },
+    });
+
     const buttons = [
         { image: require('./src/버튼1.png'), onPress: handleButton1Press },
         { image: require('./src/버튼2.png'), onPress: handleButton2Press },
         { image: require('./src/버튼3.png'), onPress: handleButton3Press },
         { image: require('./src/버튼4.png'), onPress: handleButton4Press },
     ];
-    const [posts, setPosts] = useState([
-        {
-            id: 1,
-            title: '첫 번째 게시글',
-            content: '첫 번째 게시글 내용입니다.',
-            image: require('./src/AI경로추천.png'),
-            author: '작성자1',
-            time: '2023-10-10 23:48', // 실제 앱에서는 현재 시간을 자동으로 가져오는 방식을 사용해야 합니다.
-            views: 123,
-            comments: [
-                { author: "서수찬", text: "앙기모띠" },
-                { author: "강희연", text: "안녕하세요" },
-                { author: "최광혁", text: "잘보고갑니다" },
-                { author: "송인호", text: "ㄷㅊ" },
-                { author: "서수찬", text: "기모띠기모띠기모띠기모띠" },
-                { author: "강희연", text: "기모띠기모띠기모띠기모띠기모띠" },
-              ],
-        },
-        {
-            id: 2,
-            title: '두 번째 게시글',
-            content: '두 번째 게시글 내용입니다.두 번째 게시글 내용입니다.두 번째 게시글 내용입니다.두 번째 게시글 내용입니다.두 번째 게시글 내용입니다.',
-            image: require('./src/ad2.png'),
-            author: '작성자2',
-            time: '2023-10-10 23:48', 
-            views: 811,
-            comments: [
-                { author: "서수찬", text: "앙기모띠" },
-              ],
-        },
-        { 
-            id: 3,
-            title: '세 번째 게시글',
-            content: '세 번째 게시글 내용입니다.세 번째 게시글 내용입니다.세 번째 게시글 내용입니다.세 번째 게시글 내용입니다.세 번째 게시글 내용입니다.세 번째 게시글 내용입니다.세 번째 게시글 내용입니다.세 번째 게시글 내용입니다.세 번째 게시글 내용입니다.세 번째 게시글 내용입니다.',
-            image: require('./src/ad3.png') ,
-            author: '작성자3',
-            time: '2023-10-10 23:48',
-            views: 1,
-            comments: [
-                { author: "서수찬", text: "앙기모띠" },
-              ],
 
-        },
-        { id: 4, title: '네 번째 게시글', content: '네 번째 게시글 내용입니다.', image: require('./src/ad3.png') },
+    const [posts, setPosts] = useState([]);  // 초기 상태를 빈 배열로 설정합니다.
 
-        // 원하는 만큼 게시글 데이터를 추가하세요.
-    ]);
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                // 'http://10.20.100.29:8082/posts' 는 실제 서버 주소와 엔드포인트로 변경해야 합니다.
+                const response = await axios.get('http://10.20.100.29:8082/posts');
+                
+                if (response.status === 200) {  // HTTP 요청이 성공한 경우
+                    setPosts(response.data);  // 받아온 데이터로 'posts' 상태 업데이트
+                } else {  // HTTP 요청이 실패한 경우
+                    console.error('Failed to fetch posts:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Failed to fetch posts:', error);
+            }
+        };
+    
+        fetchPosts();  // useEffect 내부에서 직접 호출
+    
+    }, []);  // 빈 의존성 배열을 넣어 컴포넌트 마운트 시 한 번만 실행
+    
+
+    const contents = {
+        '인기': (
+            <FlatList
+                data={posts}
+                keyExtractor={(item) => item._id.toString()}
+                renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => navigation.navigate('PostDetail', { post: item })}>
+                    <View style={[styles.postItem, { flexDirection: 'column' }]}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <View style={{ flexShrink: 1 }}>
+                                <Text style={[styles.postTitle, { color: '#FFEB81' }]}>{item.title}</Text>
+                                <Text
+                                    numberOfLines={3}
+                                    ellipsizeMode='tail' //3줄넘어가면 ...으로 표시
+                                    style={styles.postContent}>{item.content}</Text>
+                            </View>
+                            <View>
+                                {item.imageUrls && item.imageUrls.length > 0 &&
+                                    <Image
+                                        source={{ uri: 'http://10.20.100.29:8082/' + item.imageUrls[0] }}
+                                        style={{ width: 110, height: 110, borderRadius: 30 }}
+                                        resizeMode="contain"
+                                    />
+                                }
+                                {item.imageUrls && item.imageUrls.length > 1 &&
+                                    <View style={styles.moreImagesIndicator}>
+                                        <Text style={styles.moreImagesText}>+{item.imageUrls.length - 1}</Text>
+                                    </View>
+                                }
+                            </View>
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 10 }}>
+                            <Text style={{ marginRight: 10 , color: '#ffffff'}}>{item.author}</Text>
+                            <Text style={{ marginRight: 10, color: '#ffffff'}}>
+                                {new Date(item.createdAt).toLocaleTimeString('ko-KR', { hour12: true, hour: '2-digit', minute:'2-digit' })}
+                            </Text>
+                            <Text style={{color: '#ffffff'}}>{"♥ " + item.likeCount}</Text>
+                        </View>
+                                
+                    </View>
+                    </TouchableOpacity>
+                )}
+            />
+        ),
+        '오늘의 라이딩일기': (
+            <FlatList
+            data={posts.filter((item) => item.title === '오늘의 라이딩 일기')}
+            keyExtractor={(item) => item._id.toString()}
+            renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => navigation.navigate('PostDetail', { post: item })}>
+                <View style={[styles.postItem, { flexDirection: 'column' }]}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ flexShrink: 1 }}>
+                            <Text style={[styles.postTitle, { color: '#FFEB81' }]}>{item.title}</Text>
+                            <Text
+                                numberOfLines={3}
+                                ellipsizeMode='tail' //3줄넘어가면 ...으로 표시
+                                style={styles.postContent}>{item.content}</Text>
+                        </View>
+                        <View>
+                            {item.imageUrls && item.imageUrls.length > 0 &&
+                                <Image
+                                    source={{ uri: 'http://10.20.100.29:8082/' + item.imageUrls[0] }}
+                                    style={{ width: 110, height: 110, borderRadius: 30 }}
+                                    resizeMode="contain"
+                                />
+                            }
+                            {item.imageUrls && item.imageUrls.length > 1 &&
+                                <View style={styles.moreImagesIndicator}>
+                                    <Text style={styles.moreImagesText}>+{item.imageUrls.length - 1}</Text>
+                                </View>
+                            }
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 10 }}>
+                        <Text style={{ marginRight: 10 , color: '#ffffff'}}>{item.author}</Text>
+                        <Text style={{ marginRight: 10, color: '#ffffff'}}>
+                            {new Date(item.createdAt).toLocaleTimeString('ko-KR', { hour12: true, hour: '2-digit', minute:'2-digit' })}
+                        </Text>
+                        <Text style={{color: '#ffffff'}}>{"♥ " + item.likeCount}</Text>
+                    </View>
+                            
+                </View>
+                </TouchableOpacity>
+            )}
+        />
+        ),
+        '같이타요': (
+            <FlatList
+            data={posts.filter((item) => item.title === '같이타요')}
+            keyExtractor={(item) => item._id.toString()}
+            renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => navigation.navigate('PostDetail', { post: item })}>
+                <View style={[styles.postItem, { flexDirection: 'column' }]}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ flexShrink: 1 }}>
+                            <Text style={[styles.postTitle, { color: '#FFEB81' }]}>{item.title}</Text>
+                            <Text
+                                numberOfLines={3}
+                                ellipsizeMode='tail' //3줄넘어가면 ...으로 표시
+                                style={styles.postContent}>{item.content}</Text>
+                        </View>
+                        <View>
+                            {item.imageUrls && item.imageUrls.length > 0 &&
+                                <Image
+                                    source={{ uri: 'http://10.20.100.29:8082/' + item.imageUrls[0] }}
+                                    style={{ width: 110, height: 110, borderRadius: 30 }}
+                                    resizeMode="contain"
+                                />
+                            }
+                            {item.imageUrls && item.imageUrls.length > 1 &&
+                                <View style={styles.moreImagesIndicator}>
+                                    <Text style={styles.moreImagesText}>+{item.imageUrls.length - 1}</Text>
+                                </View>
+                            }
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 10 }}>
+                        <Text style={{ marginRight: 10 , color: '#ffffff'}}>{item.author}</Text>
+                        <Text style={{ marginRight: 10, color: '#ffffff'}}>
+                            {new Date(item.createdAt).toLocaleTimeString('ko-KR', { hour12: true, hour: '2-digit', minute:'2-digit' })}
+                        </Text>
+                        <Text style={{color: '#ffffff'}}>{"♥ " + item.likeCount}</Text>
+                    </View>
+                            
+                </View>
+                </TouchableOpacity>
+            )}
+        />
+        ),
+        '경로추천': (
+            <FlatList
+            data={posts.filter((item) => item.title === '경로추천')}
+            keyExtractor={(item) => item._id.toString()}
+            renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => navigation.navigate('PostDetail', { post: item })}>
+                <View style={[styles.postItem, { flexDirection: 'column' }]}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ flexShrink: 1 }}>
+                            <Text style={[styles.postTitle, { color: '#FFEB81' }]}>{item.title}</Text>
+                            <Text
+                                numberOfLines={3}
+                                ellipsizeMode='tail' //3줄넘어가면 ...으로 표시
+                                style={styles.postContent}>{item.content}</Text>
+                        </View>
+                        <View>
+                            {item.imageUrls && item.imageUrls.length > 0 &&
+                                <Image
+                                    source={{ uri: 'http://10.20.100.29:8082/' + item.imageUrls[0] }}
+                                    style={{ width: 110, height: 110, borderRadius: 30 }}
+                                    resizeMode="contain"
+                                />
+                            }
+                            {item.imageUrls && item.imageUrls.length > 1 &&
+                                <View style={styles.moreImagesIndicator}>
+                                    <Text style={styles.moreImagesText}>+{item.imageUrls.length - 1}</Text>
+                                </View>
+                            }
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 10 }}>
+                        <Text style={{ marginRight: 10 , color: '#ffffff'}}>{item.author}</Text>
+                        <Text style={{ marginRight: 10, color: '#ffffff'}}>
+                            {new Date(item.createdAt).toLocaleTimeString('ko-KR', { hour12: true, hour: '2-digit', minute:'2-digit' })}
+                        </Text>
+                        <Text style={{color: '#ffffff'}}>{"♥ " + item.likeCount}</Text>
+                    </View>
+                            
+                </View>
+                </TouchableOpacity>
+            )}
+        />
+        ),
+    };
 
     return (
-
         <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity
@@ -105,35 +267,27 @@ function Community() {
                     />
                 </TouchableOpacity>
             </View>
-            <FlatList
-                data={posts}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => navigation.navigate('PostDetail', { post: item })}>
-                     <View style={[styles.postItem, { flexDirection: 'column' }]}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View style={{ flexShrink: 1 }}>
-                                <Text style={[styles.postTitle, { color: 'red' }]}>{item.title}</Text>
-                                <Text
-                                    numberOfLines={3}
-                                    ellipsizeMode='tail' //3줄넘어가면 ...으로 표시
-                                    style={styles.postContent}>{item.content}</Text>
-                            </View>
-                            <Image
-                                source={item.image}
-                                style={{ width: 110, height: 110, borderRadius: 30 }}
-                                resizeMode="contain" />
-                        </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 10 }}>
-                            <Text style={{ marginRight: 10 }}>{item.author}</Text>
-                            <Text style={{ marginRight: 10 }}>{item.time}</Text>
-                            <Text>조회 {item.views}</Text>
-                        </View>
-
-                    </View>
-                    </TouchableOpacity>
-                )}
-            />
+            <View style={styles.menuContainer}>
+                <TouchableOpacity onPress={() => setSelectedMenu('인기')}>
+                    <Text style={menuItemStyles(selectedMenu === '인기').text}>인기</Text>
+                    <View style={menuItemStyles(selectedMenu === '인기').underline} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSelectedMenu('오늘의 라이딩일기')}>
+                    <Text style={menuItemStyles(selectedMenu === '오늘의 라이딩일기').text}>오늘의 라이딩일기</Text>
+                    <View style={menuItemStyles(selectedMenu === '오늘의 라이딩일기').underline} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSelectedMenu('같이타요')}>
+                    <Text style={menuItemStyles(selectedMenu === '같이타요').text}>같이타요</Text>
+                    <View style={menuItemStyles(selectedMenu === '같이타요').underline} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSelectedMenu('경로추천')}>
+                    <Text style={menuItemStyles(selectedMenu === '경로추천').text}>경로추천</Text>
+                    <View style={menuItemStyles(selectedMenu === '경로추천').underline} />
+                </TouchableOpacity>
+            
+            </View>
+            {contents[selectedMenu]}
+            <View style={{ flex: 1 }} />
             <View style={styles.buttonContainer}>
                 {buttons.map((button, index) => (
                     <TouchableOpacity
@@ -182,7 +336,7 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     postItem: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#0C1320',
         margin: 10,
         padding: 10,
         borderRadius: 8,
@@ -194,6 +348,7 @@ const styles = StyleSheet.create({
     postContent: {
         fontSize: 16,
         marginTop: 5,
+        color: '#ffffff',
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -212,6 +367,29 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    moreImagesIndicator: {
+        position:'absolute',
+        right:-5,
+        top:-5,
+        backgroundColor:'red',
+        borderRadius:15,
+        width:30,
+        height:30,
+        alignItems:'center',
+        justifyContent:'center'
+    },
+    moreImagesText:{
+        color:'#fff',
+        fontWeight:'bold'
+    },
+    menuContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        backgroundColor: '#0C1320', // 원하는 배경색으로 설정
+        paddingVertical: 10,
+
     },
 });
 

@@ -18,9 +18,22 @@ import Myinfo from './Myinfo';
 import PostDetail from './PostDetail';
 import Posting from './Posting';
 import Aipath from './Aipath';
+import Aipath2 from './Aipath2';
+import Aipath3 from './Aipath3';
+import Aipath4 from './Aipath4';
+import Aipath5 from './Aipath5';
+import Aipath6 from './Aipath6';
+import Aipath7 from './Aipath7';
+import Aipath8 from './Aipath8';
+import Shop from './Shop';
+import ChattingList from './ChattingList';
+import ChattingRoom from './ChattingRoom';
+import ShopItemDetail from './ShopItemDetail';
+import DraggableBottomSheet from './src/animations/DraggableBottomSheet/DraggableBottomSheet';
 
 
 const Stack = createStackNavigator();
+
 
 export default function App() {
 
@@ -33,7 +46,7 @@ export default function App() {
         <Stack.Screen name="Main_3" component={Main_3} options={{ headerShown: false }}/>
         <Stack.Screen name="kakao" component={WebViewComponent} options={{ headerShown: false }}/>
         <Stack.Screen name="Community" component={Community} options={{ headerShown: false }}/>
-        <Stack.Screen name="challenge" component={ChallengeScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="ChallengeScreen" component={ChallengeScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="repairshop" component={NearbyRepairShopsScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="MainScreen" component={MainScreen} options={{ headerShown: false }}/>
@@ -44,15 +57,22 @@ export default function App() {
         <Stack.Screen name="PostDetail" component={PostDetail} options={{ headerShown: false }}/>
         <Stack.Screen name="Posting" component={Posting} options={{ headerShown: false }}/>
         <Stack.Screen name="Aipath" component={Aipath} options={{ headerShown: false }}/>
-
-
-
-
+        <Stack.Screen name="Aipath2" component={Aipath2} options={{ headerShown: false }}/>
+        <Stack.Screen name="Aipath3" component={Aipath3} options={{ headerShown: false }}/>
+        <Stack.Screen name="Aipath4" component={Aipath4} options={{ headerShown: false }}/>
+        <Stack.Screen name="Aipath5" component={Aipath5} options={{ headerShown: false }}/>
+        <Stack.Screen name="Aipath6" component={Aipath6} options={{ headerShown: false }}/>
+        <Stack.Screen name="Aipath7" component={Aipath7} options={{ headerShown: false }}/>
+        <Stack.Screen name="Aipath8" component={Aipath8} options={{ headerShown: false }}/>
+        <Stack.Screen name="Shop" component={Shop} options={{ headerShown: false }}/>
+        <Stack.Screen name="ShopItemDetail" component={ShopItemDetail} options={{ headerShown: false }}/>
+        <Stack.Screen name="ChattingList" component={ChattingList} options={{ headerShown: false }}/>
+        <Stack.Screen name="ChattingRoom" component={ChattingRoom} options={{ headerShown: false }}/>
+        <Stack.Screen name="DraggableBottomSheet" component={DraggableBottomSheet} options={{ headerShown: false }}/>
 
       </Stack.Navigator>
     </NavigationContainer>
     
   );
 }
-
 

@@ -1,20 +1,25 @@
-import React from 'react';
+﻿import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 
-function Aipath6() {
+function Aipath8() {
     const navigation = useNavigation();
 
     const handleBackPress = () => {
-        navigation.navigate('Aipath5');
-    };
-
-    const handleNextPress = () => {
         navigation.navigate('Aipath7');
-
     };
 
+    const handleStartPress = () => {
+        navigation.navigate('MainScreen');
+
+    };
+    const handleRestartPress = () => {
+        navigation.navigate('Aipath');
+
+    };
+    
+    const userName = "서수찬"
     return (
 
         <View style={styles.container}>
@@ -28,27 +33,32 @@ function Aipath6() {
                 </TouchableOpacity>
             </View>
 
-            <View style={styles.textContainer}>
-                <View style={styles.textBackground}>
-                    <Text style={styles.Text1}> 주로 라이딩하는
-                        <Text style={styles.AIText}> 시간</Text>
-                        은?
-                    </Text>
+            <View style={styles.profileContainer}>
+                <Image
+                    source={require('./src/ad.png')} // 사용자의 실제 프로필 이미지 URL을 입력해야 합니다.
+                    style={styles.profileImage}
+                />
+                <View style={{ flexDirection: 'row' }}>
+                    <View style={{ backgroundColor: '#1E58BF', borderRadius: 20, paddingHorizontal: 8 }}>
+                        <Text style={[styles.profileText, { fontWeight: 'bold' }]}>{`${userName}`}</Text>
+                    </View>
+                    <Text style={styles.profileText}> 님의 성향은?</Text>
                 </View>
                 <Text style={styles.text2}>
-                낮☀, 밤🌙 중에 주로 라이딩하는{'\n'}시간을 알려주세요!</Text>
+                    서울숲부터 여의도까지의 아름다운 경치와 휴식 공간{'\n'}
+                    을 제공하는 고급 자전거 경로를 추천합니다</Text>
             </View>
 
 
             <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={handleNextPress}>
-                    <View style={styles.button}>
-                        <Text style={styles.ButtonText}>낮</Text>
+                <TouchableOpacity onPress={handleRestartPress}>
+                    <View style={styles.button2}>
+                        <Text style={styles.ButtonText}>다시하기</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={handleNextPress}>
+                <TouchableOpacity onPress={handleStartPress}>
                     <View style={styles.button}>
-                        <Text style={styles.ButtonText}>밤</Text>
+                        <Text style={styles.ButtonText}>저장하기</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -90,17 +100,25 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 0,
-        top: '-30%',
-        flexDirection: 'column',
+        top: '-20%',
     },
     button: {
-        margin: 10,
-        width: 326,
+        width: 160,
+        height: 60,
+        backgroundColor: '#1E58BF',
+        borderRadius: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 10,
+    },
+    button2: {
+        width: 160,
         height: 60,
         backgroundColor: '#313A4B',
         borderRadius: 16,
         alignItems: 'center',
         justifyContent: 'center',
+        marginRight: 10,
     },
     ButtonText: {
         fontFamily: 'System',
@@ -112,14 +130,19 @@ const styles = StyleSheet.create({
         letterSpacing: -0.025,
         color: '#FFFFFF',
     },
-    textContainer: {
+    profileContainer: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         top: '-10%',
     },
-
-    Text1: {
+    profileImage: {
+        width: 200,
+        height: 200,
+        borderRadius: 100,
+        marginBottom: 20,
+    },
+    profileText: {
         color: '#FFFFFF',
         fontSize: 23
     },
@@ -128,17 +151,13 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginTop: 10,
         textAlign: 'center',
-        lineHeight: 40, //텍스트 줄 간격
+        lineHeight: 30, //텍스트 줄 간격
     },
     AIText: {
-        color: '#007FFF',  // 파랑색 RGB 코드
+        color: '#1E58BF',  // 파랑색 RGB 코드
         fontSize: 25,
-    },
-    textBackground: {
-        backgroundColor: '#313A4B',  // 배경색 설정
-        borderRadius: 10,  // 모서리 둥글게 (원하는 대로 조정)
-        padding: 10, 
       },
+
 });
 
-export default Aipath6;
+export default Aipath8;

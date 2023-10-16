@@ -108,7 +108,7 @@ function MainScreen() {
     navigation.navigate('repairshop');
   };
   const handleridingstart = () => {
-    navigation.navigate('Riding');
+    navigation.navigate('DraggableBottomSheet');
   };
   const handleAIstart = () => {
     navigation.navigate('Aipath');
@@ -124,12 +124,15 @@ function MainScreen() {
   const handlecommunity = () => {
     navigation.navigate('Community');
   };
-
+  const handledShopstart = () => {
+    navigation.navigate('Shop');
+  };
+  
   function handleAdClick(adNumber) {
     if(adNumber === 1) {
       navigation.navigate('Login');
     } else if(adNumber === 2) {
-      navigation.navigate('Login');
+      navigation.navigate('Aipath');
     } else if(adNumber === 3) {
       navigation.navigate('Community');
     }
@@ -198,8 +201,7 @@ function MainScreen() {
 
         <TouchableOpacity
           style={[styles.button, { bottom: 80, right: 100 }]}
-          onPress={() => {
-          }}>
+          onPress={handleddarungstart}>
           <Image
             source={require('./src/근처대여점.png')}
             style={styles.buttonImage} />
@@ -208,7 +210,7 @@ function MainScreen() {
 
         <TouchableOpacity
           style={[styles.button, { bottom: 270, left: 100 }]}
-          onPress={handleddarungstart}>
+          onPress={handledShopstart}>
           <Image
             source={require('./src/스토어.png')}
             style={styles.buttonImage} />
