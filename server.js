@@ -6,8 +6,11 @@ const cors = require('cors');
 const { check, validationResult } = require('express-validator');
 const multer  = require('multer');
 const path = require('path');
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
+
+// 웹소켓
+const http = require('http');
+const socketIO = require('socket.io');
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -53,13 +56,44 @@ const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'MongoDB 연결 오류:'));
 db.once('open', () => {
-console.log('MongoDB에 연결되었습니다.');
+    console.log('MongoDB에 연결되었습니다.');
 
-// MongoDB 연결이 성공한 후에 서버를 시작
-app.listen(port, () => {
-    console.log(`서버가 포트 ${port}에서 실행 중입니다.`);
+    // 웹 소켓
+    const server = http.createServer(app);
+
+    // Socket.IO 서버 생성
+    const io = socketIO(server);
+
+    // 서버 메모리에 위치 정보를 저장할 배열 선언
+    const locationData = [];
+
+    io.on('connection', (socket) => {
+        console.log('A user connected');
+        
+
+        // 위치 정보 전송 이벤트 핸들러
+        socket.on('sendLocation', (location) => {
+            console.log(`사용자 위치 정보: ${JSON.stringify(location)}`);
+
+            // 서버 메모리에 위치 정보 저장
+            locationData.push(location);
+
+        // 모든 클라이언트에게 위치 정보를 브로드캐스트
+        io.emit('receiveLocation', location);
+        });
+
+        socket.on('disconnect', () => {
+        console.log('A user disconnected');
+        });
+    });
+
+
+    // MongoDB 연결이 성공한 후에 서버를 시작
+    app.listen(port, () => {
+        console.log(`서버가 포트 ${port}에서 실행 중입니다.`);
+    });
 });
-});
+
 
 
 // 모델 정의 - 이름(name), 이메일(email), 비밀번호(password), 프로필(profile)을 포함합니다.
@@ -471,3 +505,27 @@ app.delete('/comments/:id', async (req, res) => {
     res.status(200).json({ message: 'Comment deleted successfully' });
 });
 
+// Airesponse 모델 정의
+const AskResponseSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    response: String,
+});
+
+const AskResponse = mongoose.model('AskResponse', AskResponseSchema);
+
+// airesponse 디비 저장
+app.post('/api/save-response', async (req, res) => {
+    const newAskResponse = new AskResponse({
+        name: req.body.name,
+        email: req.body.email,
+        response: req.body.response,
+    });
+
+    try{
+        await newAskResponse.save();
+        res.status(200).send({ message: 'Data saved successfully.' });
+    }catch(error){
+        res.status(500).send({ error });
+    }
+});
