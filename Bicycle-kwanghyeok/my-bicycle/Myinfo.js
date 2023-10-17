@@ -1,44 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Dimensions, TouchableWithoutFeedback, Platform } from 'react-native';
+import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Dimensions, ActivityIndicator  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const screenWidth = Dimensions.get('window').width; // 화면 가로 크기를 가져옴
 const Myinfo = () => {
     const [selectedImage, setSelectedImage] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigation = useNavigation();
     const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [userProfileImageUrl, setUserProfileImageUrl] = useState(null);
+    const [pw, setPw] = useState('');
+    const { width, height } = Dimensions.get('window');
 
+    const [userName, setUserName] = useState(''); // userName 상태 추가
 
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
                 const userId = await AsyncStorage.getItem('userid');
-                const response = await axios.get(`http://10.20.100.29:8082/user/${userId}`);
+                const response= await axios.get(`http://10.20.102.175:8082/getUserProfile?userId=${userId}`);
                 
-                if (response.status === 200) {  // HTTP 요청이 성공한 경우
-                    setUserProfileImageUrl(response.data.profileImageUrl);  // 받아온 데이터로 'userProfileImageUrl' 상태 업데이트
-                } else {  // HTTP 요청이 실패한 경우
-                    console.error('Failed to fetch user profile:', response.status, response.statusText);
+                // 'user.profile'와 'user.name'을 업데이트
+                if (response.data.profile) {
+                    setSelectedImage(`${response.data.profile}`);
                 }
+                
+                if (response.data.name) { // 서버 응답으로부터 name 필드가 있으면 userName 상태 업데이트
+                    setUserName(response.data.name);
+                }
+    
             } catch (error) {
-                console.error('Failed to fetch user profile:', error);
+                console.error(error);
+            } finally {
+                setIsLoading(false);
             }
         };
-        
-        fetchUserProfile();  // useEffect 내부에서 직접 호출
     
+        fetchUserProfile();
     }, []);
 
 
-    const handlenextPress = () => {
-        navigation.navigate('Main');
-    };
     const handlebackPress = () => {
         navigation.navigate('MainScreen');
     };
@@ -51,79 +55,79 @@ const Myinfo = () => {
             setName('');
         }
     };
-    const handleEmailClick = () => {
-        if (!email) {
-            setEmail('');
+    const handlePwClick = () => {
+        if (!pw) {
+            setPw('');
         }
     };
-
     const handleImageSelect = async () => {
         try {
-            // 권한 확인 및 요청
-            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-            if (status !== 'granted') {
-                alert('Sorry, we need camera roll permissions to make this work!');
-                return;
-            }
-    
             const result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [1, 1], // 이미지 비율 설정
                 quality: 1, // 이미지 품질 (0 ~ 1)
             });
-        
-            if (!result.canceled) {
-                setSelectedImage(result.assets[0].uri);
-        
-                let formData = new FormData();
-                    
-                formData.append('profile', {
-                    uri: result.assets[0].uri,
-                    type: 'image/jpeg',
-                    name: 'profile.jpg'
-                });
-    
-                const userId = await AsyncStorage.getItem('userid');
-        
-                formData.append('userId', userId);
 
-                try {
-                    const response = await axios.post('http://10.20.100.29:8082/updateProfileImage', formData, {
-                        headers: { 'Content-Type': 'multipart/form-data' },
-                    });
-                    
-                    if (response.status === 200) {  
-                        console.log('Profile image successfully updated.');
-                        setSelectedImage(response.data.profileImageUrl); // 서버에서 반환한 이미지 URL로 업데이트
-                    } else {  
-                        console.error('Failed to update profile image:', response.status, response.statusText);
-                    }
-                } catch (error) {
-                    console.error('Failed to update profile image:', error);
-                }
+            if (!result.canceled) {
+                // 사용자가 이미지를 선택한 경우
+                setSelectedImage(result.assets[0].uri);
             }
         } catch (error) {
-            console.error('Image selection error:', error);
+            console.error('이미지 선택 에러:', error);
         }
     };
+
+    const handleSavePress = async () => {
+        try {
+            let uriParts = selectedImage.split('.');
+            let fileType = uriParts[uriParts.length - 1];
+        
+            let formData = new FormData();
+            
+            formData.append('profile', {
+                uri: selectedImage,
+                name: `photo.${fileType}`,
+                type: `image/${fileType}`,
+            });
     
+            const userId = await AsyncStorage.getItem('userid');
+            formData.append('userId', userId);
+            
+             // 만약 name state가 비어있지 않다면 해당 값을 서버로 전송
+            if (name !== '') {
+                formData.append('name', name);
+            }
+                
+            const response= await axios.post("http://10.20.102.175:8082/updateUserProfile", formData,{
+                headers:{
+                    'Content-Type': 'multipart/form-data',
+                },
+        });
+        alert(response.data.message);
     
+        } catch(e) {
+            console.error(e);
+        }
+    };
 
     return (
         <View style={styles.mainContainer}>
             <View style={styles.group1}>
                 <Text style={styles.joinText}>내 정보</Text>
-                <TouchableWithoutFeedback onPress={handleImageSelect}>
-                    <View style={styles.imageContainer}>
-                    <Image 
-                        source={userProfileImageUrl ? { uri: userProfileImageUrl } : require('./src/defultImage.png')} 
-                        style={styles.img} 
-                    />
-                        <Text style={styles.nameText}>덤디덤디</Text>
+                {isLoading ? (
+                    <ActivityIndicator /> // 로딩 중일 때 ActivityIndicator 표시
+                        ) : (
+                        <TouchableWithoutFeedback onPress={handleImageSelect}>
+                            <View style={styles.imageContainer}>
+                                <Image
+                                    source={selectedImage ? { uri: selectedImage } : require('./src/defultImage.png')}
+                                    style={styles.img}
+                                />
+                        <Text style={styles.nameText}>{userName}</Text>
                     </View>
                 </TouchableWithoutFeedback>
-
+                )}
                 <TouchableWithoutFeedback onPress={handleNameClick}>
                     <View style={styles.rectangle1}>
                         <TextInput
@@ -135,19 +139,19 @@ const Myinfo = () => {
                         />
                     </View>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={handleEmailClick}>
+                <TouchableWithoutFeedback onPress={handlePwClick}>
                     <View style={styles.rectangle2}>
                         <TextInput
                             style={styles.inputText}
-                            value={email}
-                            onChangeText={(text) => setEmail(text)}
-                            placeholder={!email ? 'email' : ''}
+                            value={pw}
+                            onChangeText={(text) => setPw(text)}
+                            placeholder={!pw ? 'pw' : ''}
                             placeholderTextColor="#777C89"
                         />
                     </View>
                 </TouchableWithoutFeedback>
                 <View style={styles.group2}>
-                    <TouchableOpacity onPress={handlenextPress}>
+                    <TouchableOpacity onPress={handleSavePress}>
                         <View style={styles.button}>
                             <Text style={styles.SignupbuttonText}>저장하기</Text>
                         </View>

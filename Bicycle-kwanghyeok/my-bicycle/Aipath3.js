@@ -30,30 +30,25 @@ function Aipath3() {
 
             <View style={styles.textContainer}>
                 <View style={styles.textBackground}>
-                    <Text style={styles.Text1}> 당신의
-                        <Text style={styles.AIText}> 라이딩 등급 </Text>
-                        을 알려주세요!
+                    <Text style={styles.Text1}> 주로 라이딩하는
+                        <Text style={styles.AIText}> 시간</Text>
+                        은?
                     </Text>
                 </View>
                 <Text style={styles.text2}>
-                초보자, 중급자, 전문가도 즐길 수 있다!</Text>
+                낮☀, 밤🌙 중에 주로 라이딩하는{'\n'}시간을 알려주세요!</Text>
             </View>
 
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={handleNextPress}>
                     <View style={styles.button}>
-                        <Text style={styles.ButtonText}>초보자</Text>
+                        <Text style={styles.ButtonText}>낮</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleNextPress}>
                     <View style={styles.button}>
-                        <Text style={styles.ButtonText}>중급자</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleNextPress}>
-                    <View style={styles.button}>
-                        <Text style={styles.ButtonText}>고급자</Text>
+                        <Text style={styles.ButtonText}>밤</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -121,7 +116,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        top: '-8%',
+        top: '-10%',
     },
 
     Text1: {
@@ -142,8 +137,7 @@ const styles = StyleSheet.create({
     textBackground: {
         backgroundColor: '#313A4B',  // 배경색 설정
         borderRadius: 10,  // 모서리 둥글게 (원하는 대로 조정)
-        padding: 10,  // 텍스트와 배경 사이의 간격 (원하는 대로 조정)
-        // 필요한 다른 스타일 요소들...
+        padding: 10, 
       },
 });
 

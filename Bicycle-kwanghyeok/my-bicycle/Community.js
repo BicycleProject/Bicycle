@@ -19,7 +19,7 @@ function Community() {
     };
 
     const handleButton3Press = () => {
-        // 세 번째 버튼을 눌렀을 때 실행할 작업을 여기에 추가
+        navigation.navigate('FriendList');
     };
 
     const handleButton4Press = () => {
@@ -50,8 +50,8 @@ function Community() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                // 'http://10.20.100.29:8082/posts' 는 실제 서버 주소와 엔드포인트로 변경해야 합니다.
-                const response = await axios.get('http://10.20.100.29:8082/posts');
+                // 'http://10.20.102.175:8082/posts' 는 실제 서버 주소와 엔드포인트로 변경해야 합니다.
+                const response = await axios.get('http://10.20.102.175:8082/posts');
                 
                 if (response.status === 200) {  // HTTP 요청이 성공한 경우
                     setPosts(response.data);  // 받아온 데이터로 'posts' 상태 업데이트
@@ -87,7 +87,7 @@ function Community() {
                             <View>
                                 {item.imageUrls && item.imageUrls.length > 0 &&
                                     <Image
-                                        source={{ uri: 'http://10.20.100.29:8082/' + item.imageUrls[0] }}
+                                        source={{ uri: 'http://10.20.102.175:8082/' + item.imageUrls[0] }}
                                         style={{ width: 110, height: 110, borderRadius: 30 }}
                                         resizeMode="contain"
                                     />
@@ -130,7 +130,7 @@ function Community() {
                         <View>
                             {item.imageUrls && item.imageUrls.length > 0 &&
                                 <Image
-                                    source={{ uri: 'http://10.20.100.29:8082/' + item.imageUrls[0] }}
+                                    source={{ uri: 'http://10.20.102.175:8082/' + item.imageUrls[0] }}
                                     style={{ width: 110, height: 110, borderRadius: 30 }}
                                     resizeMode="contain"
                                 />
@@ -173,7 +173,7 @@ function Community() {
                         <View>
                             {item.imageUrls && item.imageUrls.length > 0 &&
                                 <Image
-                                    source={{ uri: 'http://10.20.100.29:8082/' + item.imageUrls[0] }}
+                                    source={{ uri: 'http://10.20.102.175:8082/' + item.imageUrls[0] }}
                                     style={{ width: 110, height: 110, borderRadius: 30 }}
                                     resizeMode="contain"
                                 />
@@ -216,7 +216,7 @@ function Community() {
                         <View>
                             {item.imageUrls && item.imageUrls.length > 0 &&
                                 <Image
-                                    source={{ uri: 'http://10.20.100.29:8082/' + item.imageUrls[0] }}
+                                    source={{ uri: 'http://10.20.102.175:8082/' + item.imageUrls[0] }}
                                     style={{ width: 110, height: 110, borderRadius: 30 }}
                                     resizeMode="contain"
                                 />

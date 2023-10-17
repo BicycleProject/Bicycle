@@ -30,25 +30,39 @@ function Aipath5() {
 
             <View style={styles.textContainer}>
                 <View style={styles.textBackground}>
-                    <Text style={styles.Text1}> 라이딩
-                        <Text style={styles.AIText}> 목적</Text>
-                        을 알려주세요!
+                    <Text style={styles.Text1}> 누구와 함께하고 싶나요?
+  
                     </Text>
                 </View>
-                <Text style={styles.text2}>
-                    주로 라이딩 할 때 무슨 목적으로 타고 계신가요?</Text>
+                <Text style={styles.AIText}> 혼자도 괜찮아요! </Text>
+                <Text style={styles.text2}> 같이 라이딩 할 사람들을 선택해주세요!</Text>
             </View>
 
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={handleNextPress}>
                     <View style={styles.button}>
-                        <Text style={styles.ButtonText}>운동</Text>
+                        <Text style={styles.ButtonText}>솔로</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleNextPress}>
                     <View style={styles.button}>
-                        <Text style={styles.ButtonText}>산책</Text>
+                        <Text style={styles.ButtonText}>친구</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleNextPress}>
+                    <View style={styles.button}>
+                        <Text style={styles.ButtonText}>커플</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleNextPress}>
+                    <View style={styles.button}>
+                        <Text style={styles.ButtonText}>가족</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleNextPress}>
+                    <View style={styles.button}>
+                        <Text style={styles.ButtonText}>동호회</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -90,7 +104,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 0,
-        top: '-30%',
+        top: '-10%',
         flexDirection: 'column',
     },
     button: {
@@ -116,7 +130,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        top: '-12%',
+        top: '3%',
     },
 
     Text1: {
@@ -132,12 +146,14 @@ const styles = StyleSheet.create({
     },
     AIText: {
         color: '#007FFF',  // 파랑색 RGB 코드
-        fontSize: 25,
+        marginTop: 10,
+        fontSize: 20,
     },
     textBackground: {
-        backgroundColor: '#313A4B', 
-        borderRadius: 10,  
-        padding: 10,  
+        backgroundColor: '#313A4B',  // 배경색 설정
+        borderRadius: 10,  // 모서리 둥글게 (원하는 대로 조정)
+        padding: 10,  // 텍스트와 배경 사이의 간격 (원하는 대로 조정)
+        // 필요한 다른 스타일 요소들...
       },
 });
 

@@ -90,7 +90,7 @@ function Posting() {
     
         try {
             // 업로드 처리 (서버 주소와 엔드포인트는 실제 상황에 맞게 변경해야 함)
-            await axios.post("http://10.20.100.29:8082/posting", formData, {
+            await axios.post("http://10.20.102.175:8082/posting", formData, {
                 headers: { 
                     "Content-Type": "multipart/form-data",
                 },

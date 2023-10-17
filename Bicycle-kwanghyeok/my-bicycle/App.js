@@ -5,7 +5,6 @@ import WebViewComponent from './KakaoComponent'; // kakao map 연동
 import ChallengeScreen from './ChallengeScreen'; // challenge 컴포넌트 이동
 import Community from './Community';
 import NearbyRepairShopsScreen from './repairshop';
-import LoginScreen from './LoginScreen';
 import Login from './Login';
 import Main_1 from './Main_1';
 import Main_2 from './Main_2';
@@ -26,6 +25,8 @@ import Aipath6 from './Aipath6';
 import Aipath7 from './Aipath7';
 import Aipath8 from './Aipath8';
 import Shop from './Shop';
+import FriendAdd from './FriendAdd';
+import FriendList from './FriendList';
 import ChattingList from './ChattingList';
 import ChattingRoom from './ChattingRoom';
 import ShopItemDetail from './ShopItemDetail';
@@ -39,7 +40,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="MainScreen" screenOptions={{ headerShown: false ,cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,}}>
+      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false ,cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,}}>
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
         <Stack.Screen name="Main_1" component={Main_1} options={{ headerShown: false }}/>
         <Stack.Screen name="Main_2" component={Main_2} options={{ headerShown: false }}/>
@@ -48,7 +49,6 @@ export default function App() {
         <Stack.Screen name="Community" component={Community} options={{ headerShown: false }}/>
         <Stack.Screen name="ChallengeScreen" component={ChallengeScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="repairshop" component={NearbyRepairShopsScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="MainScreen" component={MainScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }}/>
         <Stack.Screen name="Main" component={Main} options={{ headerShown: false }}/>
@@ -69,6 +69,8 @@ export default function App() {
         <Stack.Screen name="ChattingList" component={ChattingList} options={{ headerShown: false }}/>
         <Stack.Screen name="ChattingRoom" component={ChattingRoom} options={{ headerShown: false }}/>
         <Stack.Screen name="DraggableBottomSheet" component={DraggableBottomSheet} options={{ headerShown: false }}/>
+        <Stack.Screen name="FriendAdd" component={FriendAdd} options={{ headerShown: false }}/>
+        <Stack.Screen name="FriendList" component={FriendList} options={{ headerShown: false }}/>
 
       </Stack.Navigator>
     </NavigationContainer>

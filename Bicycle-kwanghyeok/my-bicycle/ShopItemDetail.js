@@ -12,6 +12,7 @@ function ShopItemDetail() {
     const navigation = useNavigation();
     const [selectedMenu, setSelectedMenu] = useState('상품설명');// 초기값 설정
     const [isModalVisible, setModalVisible] = useState(false);// 모달 상태 저장 (기본값은 false)
+    const [quantity, setQuantity] = useState(1);
 
     // 찜 상태 저장 (기본값은 false)
     const [isZzim, setZzim] = useState(false);
@@ -31,7 +32,10 @@ function ShopItemDetail() {
     };
     const handleBuyPress = () => {
         setModalVisible(true);  // 모달 보이기
-
+        setQuantity(1);
+    };
+    const handleBuy2Press = () => {
+        //구매 로직
     };
     const handleClosePress = () => {
         setModalVisible(false);  // 모달 숨기기
@@ -53,11 +57,8 @@ function ShopItemDetail() {
         },
     });
     const contents = {
-
         '상품설명': (
-
             <ScrollView>
-
                 <Image source={item.source} style={{ width: screenWidth, height: screenWidth }} />
                 <Text style={styles.title}>{item.description}</Text>
                 <View style={{ flexDirection: 'row' }}>
@@ -146,21 +147,53 @@ function ShopItemDetail() {
                     </View>
                 </TouchableOpacity>
 
-                <Modal visible={isModalVisible} transparent={true} animationType="slide">
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000000aa' }}>
-                        <View style={{ backgroundColor: '#fff', padding: 20, borderRadius: 10 }}>
-                            {/* 여기에 구매창 내용 추가 */}
-                            <Text>구매하시겠습니까?</Text>
-                            <TouchableOpacity onPress={handleClosePress}>
-                                <Text>닫기</Text>
+                {/* 구매창 모달 */}
+                <Modal visible={isModalVisible} transparent={true} animationType="slide" >
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000000aa'}}>
+                        <View style={{ backgroundColor: '#fff', padding: 30, borderRadius: 10, }}>
+                            {/* 상품 정보 */}
+                            <Text>상품명: {item.description.replace(/(.{25})/g, "$1\n")}</Text>
+
+                            <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#828282', }}>
+                                {/* 수량 조절 */}
+                                <TouchableOpacity onPress={() => quantity > 1 && setQuantity(quantity - 1)} style={styles.minusquantityButton}>
+                                    <Text style={styles.quantityButtonText}>-</Text>
+                                </TouchableOpacity>
+                                <Text>{quantity}</Text>
+                                <TouchableOpacity onPress={() => setQuantity(quantity + 1)} style={styles.plusquantityButton}>
+                                    <Text style={styles.quantityButtonText}>+</Text>
+                                </TouchableOpacity>
+                                {/* 총 가격 */}
+                                <View style={styles.pricetext}>
+                                    <Text style={styles.itemPrice}>{item.price}</Text>
+                                </View>
+                            </View>
+                            <Text style={styles.pricetext2}>총 가격: {price * quantity}원</Text>
+
+                            {/* 닫기 버튼 */}
+                            <TouchableOpacity onPress={handleClosePress} style={styles.closeButton}>
+                                <Image source={require('./src/img_delete.png')} style={styles.closeButtonImage} />
                             </TouchableOpacity>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <TouchableOpacity onPress={handleBasketPress}>
+                                    <View style={styles.buybutton}>
+                                        <Text style={styles.ButtonText}>장바구니</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={handleBuy2Press}>
+                                    <View style={styles.buybutton}>
+                                        <Text style={styles.ButtonText}>구매하기</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+
                         </View>
                     </View>
                 </Modal>
-            </View>
+            </View >
 
 
-        </View>
+        </View >
     );
 }
 
@@ -263,6 +296,69 @@ const styles = StyleSheet.create({
         marginLeft: 10,
 
     },
+    minusquantityButton: {
+        width: 30,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#787878',
+        borderRadius: 15,
+        marginHorizontal: 10
+    },
+    plusquantityButton: {
+        width: 30,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#007FFF',
+        borderRadius: 15,
+        marginHorizontal: 10
+    },
+
+    quantityButtonText: {
+        color: '#ffffff',
+        fontSize: 18
+    },
+    pricetext: {
+        marginLeft: '15%',
+        fontSize: 18,
+        fontWeight: 'bold',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 10,
+    },
+    itemPrice: {
+        marginVertical: 10,
+        fontWeight: 'bold',
+        marginLeft: 60,
+    },
+    closeButton: {
+        position: 'absolute',
+        right: 10,
+        top: 0,
+    },
+    closeButtonImage: {
+        width: 30,
+        height: 30,
+    },
+    pricetext2: {
+        color: '#1E58BF',
+        marginLeft: '40%',
+        fontSize: 18,
+        fontWeight: 'bold',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 10,
+    },
+    buybutton: {
+        width: 120,
+        height: 40,
+        backgroundColor: '#1E58BF',
+        borderRadius: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 10,
+    }
 });
 
 export default ShopItemDetail;

@@ -12,7 +12,7 @@ const Signup = () => {
 
     async function checkEmail(email) {
         try {
-            let response = await fetch(`http://10.20.100.29:8082/check-email?email=${encodeURIComponent(email)}`);
+            let response = await fetch(`http://10.20.102.175:8082/check-email?email=${encodeURIComponent(email)}`);
             if (response.ok) {
                 let data = await response.json();
                 return data.exists;  // 서버가 { exists: true } 또는 { exists: false } 형태로 응답하도록 해야 합니다.
@@ -28,13 +28,20 @@ const Signup = () => {
 
     const handleSubmit = async () => {
         try {
+            // 이메일 중복 체크
+            const emailExists = await checkEmail(email);
+            if (emailExists) {
+                alert('이미 사용중인 이메일입니다. 다른 이메일을 사용해주세요.');
+                return;
+            }
+    
             // 서버로 회원가입 요청을 보냅니다.
-            const response = await axios.post('http://10.20.100.29:8082/register', { 
+            const response = await axios.post('http://10.20.102.175:8082/register', { 
                 name: name,
                 email: email,
                 password: password,
             });
-
+    
             if (response.status >= 200 && response.status < 300) {
                 alert('회원가입 성공!');
                 
@@ -44,15 +51,19 @@ const Signup = () => {
             }
             
         } catch (error) {
+            
             console.log(error);
             
             if (error.response) {
+                
                 alert(JSON.stringify(error.response.data));
                 
                 return;
+            
             }
         }
     }
+    
 
     const handlebackPress = () => {
             navigation.navigate('Main');

@@ -22,13 +22,15 @@ function PostDetail({ route }) {
     const [newCommentText,setNewCommentText] = useState('');
     const [username, setUsername] = useState('');
 
+
+    
     useEffect(() => {
         (async () => {
             try {
                 const userId = await AsyncStorage.getItem('userid');
     
                 // 백엔드에서 사용자의 좋아요 상태를 가져옴
-                const response = await axios.get(`http://10.20.100.29:8082/likeStatus`, { params: { postId: post._id, userId } });
+                const response = await axios.get(`http://10.20.102.175:8082/likeStatus`, { params: { postId: post._id, userId } });
     
                 if (response.status === 200) {
                     setLiked(response.data.liked);  // 백엔드로부터 받은 '좋아함' 상태로 업데이트
@@ -41,7 +43,6 @@ function PostDetail({ route }) {
         fetchComments();  // 페이지가 로드될 때 해당 게시글의 댓글들을 가져옴
     }, []);
 
-    
 
 
     const handleBackPress = () => {
@@ -57,7 +58,7 @@ function PostDetail({ route }) {
             setLiked(!liked);
             setLikeCount(liked ? likeCount - 1 : likeCount + 1);
     
-            const response = await axios.post(`http://10.20.100.29:8082/like`, { postId: post._id, userId });
+            const response = await axios.post(`http://10.20.102.175:8082/like`, { postId: post._id, userId });
     
             if (response.status !== 200) {
                 throw new Error("Failed to like/unlike the post");
@@ -90,7 +91,7 @@ function PostDetail({ route }) {
     const handleCommentSubmit = async () => {
         try{
             const userId= await AsyncStorage.getItem('userid');
-            await axios.post(`http://10.20.100.29:8082/comments`, { postId: post._id , userId , content:newCommentText });
+            await axios.post(`http://10.20.102.175:8082/comments`, { postId: post._id , userId , content:newCommentText });
             
             setNewCommentText('');
             fetchComments();  // 새로운 댓글 작성 후 다시 댓글 목록 갱신
@@ -105,7 +106,7 @@ function PostDetail({ route }) {
         try {
             const userId= await AsyncStorage.getItem('userid');
             
-            const response = await axios.get(`http://10.20.100.29:8082/username?userId=${userId}`);
+            const response = await axios.get(`http://10.20.102.175:8082/username?userId=${userId}`);
             
             if (response.status === 200) {
                 return response.data.username;
@@ -122,7 +123,7 @@ function PostDetail({ route }) {
     // 댓글을 가져오는 함수
     const fetchComments = async () => {
         try {
-            const response = await axios.get(`http://10.20.100.29:8082/comments?postId=${post._id}`);
+            const response = await axios.get(`http://10.20.102.175:8082/comments?postId=${post._id}`);
             
             if (response.status === 200) {
                 const commentsWithUsername = await Promise.all(
@@ -157,7 +158,7 @@ function PostDetail({ route }) {
     //댓글 수정
     const handleEditComment = async (commentId, newContent) => {
         try{
-            await axios.patch(`http://10.20.100.29:8082/comments/${commentId}`, { content: newContent });
+            await axios.patch(`http://10.20.102.175:8082/comments/${commentId}`, { content: newContent });
     
             fetchComments();  // 코멘트가 수정된 후 다시 코멘트 목록 갱신
         }catch(error){
@@ -168,7 +169,7 @@ function PostDetail({ route }) {
     //댓글 삭제
     const handleDeleteComment = async (commentId) => {
         try{
-            await axios.delete(`http://10.20.100.29:8082/comments/${commentId}`);
+            await axios.delete(`http://10.20.102.175:8082/comments/${commentId}`);
     
             fetchComments();  // 코멘트가 삭제된 후 다시 코멘트 목록 갱신
         }catch(error){
@@ -220,7 +221,7 @@ function PostDetail({ route }) {
                     {post.imageUrls.map((imageUrl, index) => (
                         <Image
                             key={index}
-                            source={{ uri: 'http://10.20.100.29:8082/' + imageUrl }}
+                            source={{ uri: 'http://10.20.102.175:8082/' + imageUrl }}
                             resizeMode="contain"
                             style={{ width: screenWidth, height: screenHeight * 0.3 }}
                         />

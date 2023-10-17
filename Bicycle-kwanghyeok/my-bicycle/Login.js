@@ -14,7 +14,7 @@ const Login = () => {
 
     const handleLoginPress = async () => {
         try {
-            const response = await axios.post('http://10.20.100.29:8082/login', { 
+            const response = await axios.post('http://10.20.102.175:8082/login', { 
                 email: email,
                 password: password,
             });
