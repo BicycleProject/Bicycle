@@ -20,7 +20,7 @@ function ChattingList() {
     };
 
     const handleButton3Press = () => {
-        // 세 번째 버튼을 눌렀을 때 실행할 작업을 여기에 추가
+        navigation.navigate('FriendList');
     };
 
     const handleButton4Press = () => {
