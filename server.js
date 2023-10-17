@@ -6,6 +6,8 @@ const cors = require('cors');
 const { check, validationResult } = require('express-validator');
 const multer  = require('multer');
 const path = require('path');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -15,29 +17,30 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname)
     }
 })
-const upload = multer({ storage: storage }).array('image', 5);
 
-
-const storageProfile = multer.diskStorage({
+const storage2 = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'profile/')
+      cb(null, './profile'); // public/profile 폴더에 이미지 저장
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname)) // 이름 충돌을 피하기 위해 현재 시간을 파일 이름에 추가
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
     }
 });
 
-const uploadProfile = multer({ storage: storage })
+const upload = multer({ storage: storage }).array('image', 5);
+const upload2 = multer({ storage: storage2 });
 
 app.use(express.static(__dirname+ '/css'))
 app.set('view engine', 'ejs') //ejs셋팅 끝
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use('/uploads', express.static('uploads'));
+app.use('/profile', express.static('profile'));
 
 // Only allow requests from http://localhost:3000
 app.use(cors({
-    origin: 'http://10.20.100.29:19000'
+    origin: 'http://10.20.102.175:19000'
 }));
 
 // MongoDB와 연결
@@ -138,56 +141,53 @@ app.post('/register', [
     }
 });
 
-app.post('/updateUserProfile', async (req, res) => {
+app.post('/updateUserProfile', upload2.single('profile'), async (req, res) => {
     try {
-        const { userId, name, password } = req.body;
-
-       // 유저 아이디로 사용자 찾기
+        const { userId, name } = req.body;
         const user = await User.findById(userId);
 
         if (!user) {
-            return res.status(404).send("User not found.");
+            return res.status(404).json({ message: "User not found." });
         }
 
-        // 정보 업데이트
-        user.name = name;
-        user.password = password; // 실제 환경에서는 비밀번호 해싱 등의 추가 처리가 필요합니다.
-        
-        await user.save();
+        // 이름과 비밀번호 정보 업데이트
+        if (name) user.name = name;
 
+        // 클라이언트가 이미지를 보냈는지 확인하고 이미지 경로 업데이트
+        if (req.file) {
+            user.profile = 'profile/' + req.file.filename;
+        }
+
+        await user.save();
+        
         res.status(200).json({ message: '사용자 프로필이 성공적으로 업데이트되었습니다.' });
     } catch (error) {
         console.error(error);
-        res.status(500).send("An error occurred while processing your request.");
+        res.status(500).json({ message: "An error occurred while processing your request." });
     }
 });
 
 
-app.post('/updateProfileImage', uploadProfile.single('image'), async (req, res) => {
+// 사용자 프로필 정보 가져오기
+app.get('/getUserProfile', async (req, res) => {
+    const { userId } = req.query;
+
     try {
-        const { userId } = req.body;
-        
-        if (!userId || !req.file) {
-            return res.status(400).send("User ID or file not provided.");
-        }
-
-        // 파일 처리 로직 추가
-        const imagePath = req.file.path;
-
-        // 사용자 프로필 정보 업데이트 로직 추가
+        // 유저 아이디로 사용자 찾기
         const user = await User.findById(userId);
-        
+
         if (!user) {
-            return res.status(404).send("User not found.");
+            return res.status(404).json({ message: "User not found." });
         }
 
-        user.profileImageUrl = imagePath; 
-        await user.save();
+        // 이미지 파일 경로를 URL로 변환
+        const profileImageUrl = `http://10.20.102.175:8082/${user.profile}`;
 
-        res.status(200).json({ message: '프로필 이미지가 성공적으로 업데이트되었습니다.', profileImageUrl: imagePath });
+        // 사용자 프로필 정보 반환 (이미지 URL 포함)
+        res.status(200).json({ profile: profileImageUrl, name: user.name });
     } catch (error) {
         console.error(error);
-        res.status(500).send("An error occurred while processing your request.");
+        res.status(500).json({ message: "An error occurred while processing your request." });
     }
 });
 
@@ -413,27 +413,30 @@ app.get('/username', async (req, res) => {
     }
 });
 
-//유저 프로필 get요청
-app.get('/userProfile', async (req, res) => {
-    const { userId } = req.query;
+
+// 이메일로 사용자 프로필 정보 가져오기
+app.get('/getUserProfileByEmail', async (req, res) => {
+    const { email } = req.query;
 
     try {
-        // userId로 사용자를 찾습니다.
-        const user = await User.findById(userId);
+        // 이메일로 사용자 찾기
+        const user = await User.findOne({ email: email });
 
         if (!user) {
-            return res.status(404).send("User not found.");
+            return res.status(404).json({ message: "User not found." });
         }
-
-        // 사용자의 프로필 정보를 반환합니다.
-        res.json({ profile: user.profile });
         
+        // 이미지 파일 경로를 URL로 변환
+        const profileImageUrl = `http://10.20.102.175:8082/${user.profile}`;
+
+        // 사용자 프로필 정보 반환 (이미지 URL 포함)
+        res.status(200).json({ profile: profileImageUrl, name: user.name });
     } catch (error) {
         console.error(error);
-        res.status(500).send("An error occurred while processing your request.");
+        
+res.status(500).json({ message: "An error occurred while processing your request." });
     }
 });
-
 
 
 app.patch('/comments/:id', async (req, res) => {
@@ -467,3 +470,4 @@ app.delete('/comments/:id', async (req, res) => {
 
     res.status(200).json({ message: 'Comment deleted successfully' });
 });
+
